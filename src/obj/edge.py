@@ -9,6 +9,9 @@ class Edge:
         self._dst: Optional[Node] = dst
         self._weight: float = weight
     
+    def contains(self, instance: Node) -> bool:
+        return instance is self._src or instance is self._dst
+    
     def reverse(self) -> "Edge":
         """ Make the edge go in the reverse direction. """
         return Edge(src=self._dst, dst=self._src, weight=self._weight)
