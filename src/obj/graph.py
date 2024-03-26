@@ -17,8 +17,9 @@ class Graph:
     def add_node(self, node: Optional[Node] = None):
         # Generate a random new node
         if node is None:
-            self._nodes.append(Node(None, random.randrange(XMIN, XMAX), random.randrange(YMIN, YMAX)))
+            self._nodes.append(Node(None, random.randrange(XMIN, XMAX), random.randrange(YMIN, YMAX), len(self._nodes)))
         else: 
+            node.set_index(len(self._nodes))
             self._nodes.append(node)
 
 
