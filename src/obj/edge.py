@@ -1,13 +1,19 @@
 from typing import Optional
 from src.obj.node import Node
+from math import sqrt as SQRT
+from math import pow as POW
 
 class Edge:
     """ Represents a connection between two nodes. """
-    def __init__(self, src: Optional[Node], dst: Optional[Node], weight: float=1.0) -> None:
+    def __init__(self, src: Node, dst: Node, weighted: bool) -> None:
         """ Construct a new Edge instance. """
-        self._src: Optional[Node] = src
-        self._dst: Optional[Node] = dst
-        self._weight: float = weight
+        self._src: Node = src
+        self._dst: Node = dst
+
+        """ Calculate weight (1 for unweighted graphs)"""
+        src_x, src_y = src.get_coordinates()
+        dst_x, dst_y = src.get_coordinates()
+        self._weight: float = 1.0 if not weighted else SQRT(POW(src_x - dst_x, 2) + POW(src_y - dst_y, 2))
     
     def contains(self, instance: Node) -> bool:
         return instance is self._src or instance is self._dst
