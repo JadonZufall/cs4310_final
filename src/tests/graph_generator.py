@@ -16,3 +16,13 @@ def generate_tree_graph(num_nodes: int = random.randrange(0, MAX_NODES), weighte
         g2 = random.choice(graphs)
         g2.merge(g1, g2.get_random_node(), g1.get_random_node(), weighted, directed)
     return graphs[0]
+
+def generate_complete_graph(num_nodes: int = random.randrange(0, MAX_NODES), weighted: bool = True, directed: bool = False) -> Graph:
+    nodes = [Node(str(x), random.randrange(graph.XMIN, graph.XMAX), random.randrange(graph.YMIN, graph.YMAX)) for x in range(0, num_nodes)]
+    g = Graph(nodes)
+
+    for node1 in nodes:
+        for node2 in nodes:
+            if node1 is not node2:
+                g.add_edge(node1, node2, weighted, directed)
+    return g
