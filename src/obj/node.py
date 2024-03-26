@@ -31,11 +31,12 @@ class Edge:
         return self._weight
 
 class Node:
-    def __init__(self, value: Optional[str]=None, x: int = 0, y: int = 0) -> None:
+    def __init__(self, value: Optional[str]=None, x: int = 0, y: int = 0, index: int = 0) -> None:
         self._value: Optional[str] = value
         self._edges: list[Edge] = []
         self._x: int = x
         self._y: int = y
+        self._index = index
     
     def get_coordinates(self) -> list[int]:
         return self._x, self._y
@@ -52,3 +53,9 @@ class Node:
     
     def get_neighbors(self) -> list['Node']:
         return [edge.get_destination() for edge in self._edges]
+    
+    def set_index(self, index: int) -> None:
+        self._index = index
+
+    def get_index(self) -> int:
+        return self._index

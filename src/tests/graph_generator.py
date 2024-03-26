@@ -3,6 +3,7 @@ import src.obj.graph as graph
 from src.obj.node import Node
 import random
 import copy
+from fibheap import Fheap
 
 MAX_NODES = 31
 
