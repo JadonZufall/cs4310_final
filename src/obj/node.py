@@ -2,8 +2,6 @@ from typing import Optional
 from edge import Edge
 from node import Node
 
-
-
 class Node:
     def __init__(self, value: Optional[str]=None, x: int = 0, y: int = 0) -> None:
         self._value: Optional[str] = value
@@ -17,3 +15,8 @@ class Node:
     def add_edge(self, dst: Node, weighted: bool) -> None:
         self._edges.append(Edge(self, dst, weighted))
 
+    def get_edges(self) -> list[Edge]:
+        return self._edges
+    
+    def get_neighbors(self) -> list[Node]:
+        return [edge.get_destination() for edge in self._edges]

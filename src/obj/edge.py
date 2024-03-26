@@ -21,4 +21,13 @@ class Edge:
     def reverse(self) -> "Edge":
         """ Make the edge go in the reverse direction. """
         return Edge(src=self._dst, dst=self._src, weight=self._weight)
+    
+    def get_source(self) -> Node:
+        return self._src
+    
+    def get_destination(self) -> Node:
+        return self._dst
+    
+    def get_weight(self) -> float:
+        return self._weight
 

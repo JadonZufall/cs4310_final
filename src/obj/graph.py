@@ -12,3 +12,6 @@ class Graph:
             node1.add_edge(node2, weighted)
             if not directed:
                 node2.add_edge(node1, weighted)
+    
+    def get_nodes(self) -> list[Node]:
+        return self._nodes
