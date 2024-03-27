@@ -29,6 +29,9 @@ class Graph:
             if not directed:
                 node2.add_edge(node1, weighted)
     
+    def get_num_nodes(self) -> int:
+        return len(self._nodes)
+
     def get_nodes(self) -> list[Node]:
         return self._nodes
     
@@ -41,7 +44,8 @@ class Graph:
             for edge in edges:
                 print(f"{node.get_value()} {edge.get_destination().get_value()}")
     
-    def merge(self, g2: 'Graph', n1: Node, n2: Node, weighted: bool, directed: bool):
+    def merge(self, g2: 'Graph', n1: Optional[Node] = None, n2: Optional[Node] = None, weighted: bool = True, directed: bool = False):
         for node in g2.get_nodes():
             self.add_node(node)
-        self.add_edge(n1, n2, weighted, directed)
+        if n1 is not None and n2 is not None:
+            self.add_edge(n1, n2, weighted, directed)
