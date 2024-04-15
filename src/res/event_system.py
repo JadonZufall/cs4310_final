@@ -22,7 +22,7 @@ class EventListener:
         self.func(dt, event, *self.args, **self.kwargs)
     
 
-class EventHandler:
+class _EventHandler:
     listeners: dict[str, list[EventListener]]
     
     def __init__(self) -> None:
@@ -37,3 +37,6 @@ class EventHandler:
         self.listeners.setdefault(event_type, list())
         event_functions: list[EventListener] = self.listeners.get(event_type, None)
         event_functions.append(EventListener(self, event_type, func, args=args, kwargs=kwargs))
+
+
+EventHandler = _EventHandler()

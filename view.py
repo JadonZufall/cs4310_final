@@ -10,19 +10,16 @@ from src.obj.graph import Graph
 from src.obj.node import Node
 from src.tests.graph_generator import generate_complete_graph, generate_random_graph, generate_tree_graph
 
-        
-
-
 
 is_running: bool = True
 visual = GraphVisual(win_size=(500, 500))
-event_handler: EventHandler = EventHandler()
 tgraph: Graph = Graph()
+
 
 def exit_visual(dt: int, event: pygame.event.Event) -> None:
     global is_running
     is_running = False
-event_handler.bind_to_event(pygame.QUIT, exit_visual)
+EventHandler.bind_to_event(pygame.QUIT, exit_visual)
 
 
 for i in range(0, 10):
@@ -40,5 +37,5 @@ tgraph = generate_random_graph()
 
 while is_running:
     dt = visual.wait(fps=60)
-    event_handler.update(dt=dt)
+    EventHandler.update(dt=dt)
     visual.draw(graph=tgraph)
