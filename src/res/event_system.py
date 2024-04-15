@@ -1,13 +1,13 @@
 import pygame
 
 class EventListener:
-    parent: "EventHandler"
+    parent: "_EventHandler"
     event_type: int
     func: callable
     args: list[any]
     kwargs: dict[str, any]
     
-    def __init__(self, parent: "EventHandler", event_type: int, func: callable, args: list[any]=[], kwargs: dict[str, any]=dict()) -> None:
+    def __init__(self, parent: "_EventHandler", event_type: int, func: callable, args: list[any]=[], kwargs: dict[str, any]=dict()) -> None:
         self.parent = parent
         self.event_type = event_type
         self.func = func
