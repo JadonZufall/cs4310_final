@@ -9,11 +9,18 @@ class Edge:
         self._src: Node = src
         self._dst: Node = dst
 
-        """ Calculate weight (1 for unweighted graphs)"""
-        src_x, src_y = src.get_coordinates()
-        dst_x, dst_y = src.get_coordinates()
-        self._weight: float = 1.0 if not weighted else SQRT(POW(src_x - dst_x, 2) + POW(src_y - dst_y, 2))
+
+        if not weighted:
+            self._weight: float = 1.0
+        else:
+            self._weight: float = SQRT(POW(src._x - dst._x, 2) + POW(src._y - dst._y, 2))
     
+    def __repr__(self):
+        return repr((self._src, self._dst, self._weight))
+
+    def __lt__(self, other):
+        return self._weight < other._weight
+
     def contains(self, instance: 'Node') -> bool:
         return instance is self._src or instance is self._dst
     
@@ -38,6 +45,9 @@ class Node:
         self._y: int = y
         self._index = index
     
+    def __repr__(self):
+        return repr((self._value, self._x, self._y))
+
     def get_coordinates(self) -> list[int]:
         return self._x, self._y
 
@@ -59,3 +69,6 @@ class Node:
 
     def get_index(self) -> int:
         return self._index
+    
+    def reorder_adjacents(self):
+        self._edges.sort(key = lambda edge: edge._dst._value)

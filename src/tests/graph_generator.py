@@ -21,6 +21,8 @@ def generate_tree_graph(num_nodes: int = random.randrange(0, MAX_NODES), weighte
 
         # Merge them and connect 2 random nodes between the two graphs
         g2.merge(g1, g2.get_random_node(), g1.get_random_node(), weighted, directed)
+    
+    graphs[0].reorder_nodes()
     return graphs[0]
 
 def generate_complete_graph(num_nodes: int = random.randrange(0, MAX_NODES), weighted: bool = True, directed: bool = False) -> Graph:
@@ -33,6 +35,7 @@ def generate_complete_graph(num_nodes: int = random.randrange(0, MAX_NODES), wei
         for node2 in nodes:
             if node1 is not node2:
                 g.add_edge(node1, node2, weighted, directed)
+    g.reorder_nodes()
     return g
 
 def generate_random_graph(num_nodes: int = random.randrange(0, MAX_NODES), weighted: bool = True, directed: bool = False) -> Graph:
@@ -60,5 +63,5 @@ def generate_random_graph(num_nodes: int = random.randrange(0, MAX_NODES), weigh
                 g2.add_edge(g1_node, g2_node, weighted, directed)
 
         
-
+    graphs[0].reorder_nodes()
     return graphs[0]
