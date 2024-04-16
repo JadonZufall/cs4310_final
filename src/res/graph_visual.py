@@ -49,8 +49,8 @@ class GraphVisual:
             result.append((nx, ny))
         return result
     
-    def wait(self, fps: int):
-        self.clock.tick(fps)
+    def wait(self, fps: int) -> int:
+        return self.clock.tick(fps)
     
     def event(self, event: pygame.event.Event) -> None:
         pass
