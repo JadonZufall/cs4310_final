@@ -3,6 +3,7 @@ from src.tests.graph_generator import generate_random_graph, generate_complete_g
 from src.pathfinders.a_star import a_star
 from src.pathfinders.dijkstra import dijkstra
 from src.pathfinders.bad_find import bad_find
+from src.pathfinders.floyd_warshal import floyd_warshall
 
 class TimeTesterResult:
     def __init__(self, func: callable, args: list[any]=[], kwargs: dict[str, any]={}) -> None:
@@ -43,10 +44,11 @@ class TimeTester:
     
 
 def dijkstra_wrapper(graph, start, *args, **kwargs) -> None: dijkstra(graph, start)
+def floyd_warshall_wrapper(graph, *args, **kwargs) -> None: floyd_warshall(graph)
 
 def perform_test_on_graph(number_of_runs=1, number_of_nodes=10) -> dict[str, list[TimeTesterResult]]:
     graph = generate_complete_graph(num_nodes=number_of_nodes, weighted=True, directed=False)
     start = graph.get_random_node()
     end = graph.get_random_node()
-    result = TimeTester(["a_star", "dijkstra", "bad_find"], [a_star, dijkstra_wrapper, bad_find], args=[graph, start, end], kwargs={})
+    result = TimeTester(["a_star", "dijkstra", "bad_find", "floyd warshal"], [a_star, dijkstra_wrapper, bad_find, floyd_warshall_wrapper], args=[graph, start, end], kwargs={})
     return result.run_multi(number_of_runs)
