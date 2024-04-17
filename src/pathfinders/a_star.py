@@ -3,12 +3,14 @@ from src.obj.node import Node, Edge
 from fibheap import Fheap
 import heapq
 
-def calculate_f(current_distance, edge: Edge):
+def calculate_f(current_distance, edge: Edge, weighted: bool):
     g = current_distance + edge._weight
-    h = edge._src.calculate_distance(edge._dst)
-    return g + h
+    if weighted:
+        return g + edge._src.calculate_distance(edge._dst)
+    else:
+        return g
 
-def a_star(graph: Graph, start: Node, end: Node):
+def a_star(graph: Graph, start: Node, end: Node, weighted: bool = True):
     # Create a priority queue of edges to consider
     pq = []
     heapq.heappush(pq, (0,Edge(src=None, dst=start, weighted=False)))
@@ -42,6 +44,8 @@ def a_star(graph: Graph, start: Node, end: Node):
                 prev[current._index] = previous._index
                 distances[current._index] = distances[previous._index] + current_edge._weight
 
+            if current is end:
+                return distances, prev, added_edges, considered_edges
 
             # Get all of the adjacent edges
             adjacent_edges = current.get_edges()
@@ -56,7 +60,7 @@ def a_star(graph: Graph, start: Node, end: Node):
                 prospect = adjacent_edge._dst
 
 
-                f = calculate_f(current_distance, adjacent_edge)
+                f = calculate_f(current_distance, adjacent_edge, weighted)
 
                 # If the distance is less than the current distance for that node, keep track of it
                 if f_score[prospect._index] > f:

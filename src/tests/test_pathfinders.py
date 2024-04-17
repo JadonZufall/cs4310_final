@@ -40,22 +40,22 @@ class TestPathfinding(unittest.TestCase):
             for i in range(len(nodes)):
                 self.assertAlmostEqual(all_pairs_shortest[node._index][i], dist[i],places=4, msg="Dijstra Failure")
 
-    def check_a_star(self, graph: Graph, all_pairs_shortest):
+    def check_a_star(self, graph: Graph, all_pairs_shortest, weighted):
         # Get the nodes from the graph
         nodes = graph.get_nodes()
 
         for node1 in nodes:
             for node2 in nodes:
-                dist, prev, edges, considered = a_star(graph, node1, node2)
+                dist, prev, edges, considered = a_star(graph, node1, node2, weighted)
                 self.assertAlmostEqual(all_pairs_shortest[node1._index][node2._index], dist[node2._index], places=4, msg="A* Failure")
 
-    def all_pathfinders(self, graph: Graph):
+    def all_pathfinders(self, graph: Graph, weighted):
         # Get all Pairs Shortest Path for the Graph
         all_pairs_shortest = floyd_warshall(graph)
 
         # Test each pathfindeer
         self.check_dijkstra(graph, all_pairs_shortest)
-        self.check_a_star(graph, all_pairs_shortest)
+        self.check_a_star(graph, all_pairs_shortest, weighted)
 
     def testSmallTree(self):
         graph1 = generate_tree_graph(num_nodes=5, weighted=False, directed=False)
@@ -63,10 +63,10 @@ class TestPathfinding(unittest.TestCase):
         graph3 = generate_tree_graph(num_nodes=5, weighted=True, directed=False)
         graph4 = generate_tree_graph(num_nodes=5, weighted=True, directed=True)
 
-        self.all_pathfinders(graph1)
-        self.all_pathfinders(graph2)
-        self.all_pathfinders(graph3)
-        self.all_pathfinders(graph4)
+        self.all_pathfinders(graph1, False)
+        self.all_pathfinders(graph2, False)
+        self.all_pathfinders(graph3, True)
+        self.all_pathfinders(graph4, True)
 
     def testSmallRandom(self):
         graph1 = generate_random_graph(num_nodes=5, weighted=False, directed=False)
@@ -74,10 +74,10 @@ class TestPathfinding(unittest.TestCase):
         graph3 = generate_random_graph(num_nodes=5, weighted=True, directed=False)
         graph4 = generate_random_graph(num_nodes=5, weighted=True, directed=True)
 
-        self.all_pathfinders(graph1)
-        self.all_pathfinders(graph2)
-        self.all_pathfinders(graph3)
-        self.all_pathfinders(graph4)
+        self.all_pathfinders(graph1, False)
+        self.all_pathfinders(graph2, False)
+        self.all_pathfinders(graph3, True)
+        self.all_pathfinders(graph4, True)
 
     def testSmallComplete(self):
         graph1 = generate_complete_graph(num_nodes=5, weighted=False, directed=False)
@@ -85,10 +85,10 @@ class TestPathfinding(unittest.TestCase):
         graph3 = generate_complete_graph(num_nodes=5, weighted=True, directed=False)
         graph4 = generate_complete_graph(num_nodes=5, weighted=True, directed=True)
 
-        self.all_pathfinders(graph1)
-        self.all_pathfinders(graph2)
-        self.all_pathfinders(graph3)
-        self.all_pathfinders(graph4)
+        self.all_pathfinders(graph1, False)
+        self.all_pathfinders(graph2, False)
+        self.all_pathfinders(graph3, True)
+        self.all_pathfinders(graph4, True)
 
     def testMedTree(self):
         graph1 = generate_tree_graph(num_nodes=50, weighted=False, directed=False)
@@ -96,10 +96,10 @@ class TestPathfinding(unittest.TestCase):
         graph3 = generate_tree_graph(num_nodes=50, weighted=True, directed=False)
         graph4 = generate_tree_graph(num_nodes=50, weighted=True, directed=True)
 
-        self.all_pathfinders(graph1)
-        self.all_pathfinders(graph2)
-        self.all_pathfinders(graph3)
-        self.all_pathfinders(graph4)
+        self.all_pathfinders(graph1, False)
+        self.all_pathfinders(graph2, False)
+        self.all_pathfinders(graph3, True)
+        self.all_pathfinders(graph4, True)
 
     def testMedRandom(self):
         graph1 = generate_random_graph(num_nodes=50, weighted=False, directed=False)
@@ -107,10 +107,10 @@ class TestPathfinding(unittest.TestCase):
         graph3 = generate_random_graph(num_nodes=50, weighted=True, directed=False)
         graph4 = generate_random_graph(num_nodes=50, weighted=True, directed=True)
 
-        self.all_pathfinders(graph1)
-        self.all_pathfinders(graph2)
-        self.all_pathfinders(graph3)
-        self.all_pathfinders(graph4)
+        self.all_pathfinders(graph1, False)
+        self.all_pathfinders(graph2, False)
+        self.all_pathfinders(graph3, True)
+        self.all_pathfinders(graph4, True)
     
     def testMedComplete(self):
         graph1 = generate_complete_graph(num_nodes=50, weighted=False, directed=False)
@@ -118,10 +118,10 @@ class TestPathfinding(unittest.TestCase):
         graph3 = generate_complete_graph(num_nodes=50, weighted=True, directed=False)
         graph4 = generate_complete_graph(num_nodes=50, weighted=True, directed=True)
 
-        self.all_pathfinders(graph1)
-        self.all_pathfinders(graph2)
-        self.all_pathfinders(graph3)
-        self.all_pathfinders(graph4)
+        self.all_pathfinders(graph1, False)
+        self.all_pathfinders(graph2, False)
+        self.all_pathfinders(graph3, True)
+        self.all_pathfinders(graph4, True)
 
 if __name__ == "__main__":
     unittest.main()
