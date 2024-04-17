@@ -44,7 +44,7 @@ class Node:
         self._x: int = x
         self._y: int = y
         self._index = index
-    
+
     def __repr__(self):
         return repr((self._value, self._x, self._y))
 
@@ -72,3 +72,9 @@ class Node:
     
     def reorder_adjacents(self):
         self._edges.sort(key = lambda edge: edge._dst._value)
+
+    def calculate_distance(self, other: 'Node'):
+        src = self
+        dst = other
+        return SQRT(POW(src._x - dst._x, 2) + POW(src._y - dst._y, 2))
+        
