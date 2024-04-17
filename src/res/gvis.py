@@ -79,9 +79,6 @@ def animate():
     
     video = FuncAnimation(fig=plt.figure(), func=frame_animate, frames=30, interval=25)
     video.save("out.mp4", fps=1)
-    html = display.HTML(video.to_html5_video())
-    with open("out.html", "w") as file:
-        file.write(html.data)
     plt.close()
     
 
