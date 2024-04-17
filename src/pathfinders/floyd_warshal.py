@@ -3,20 +3,29 @@ from src.obj.graph import Graph
 from src.obj.graph import Node
 
 
+def floyd_warshall(graph: Graph):
+    nodes = graph._nodes
+    num_nodes = len(nodes)
 
-def floyd_warshal(graph: Graph, start: Node, end: Node) -> None:
-    nodes: list[Node] = graph.get_nodes()
-    N: int = graph.get_num_nodes()
-    V: int = sum([m.get_number_edges() for m in nodes])
-    
-    cost_matrix: list[list[float]] = [[math.inf] for i in range(N)]
-    for i in range(N):
-        for j in range(N):
-            if nodes[j] not in nodes[i].get_neighbors():
-                cost_matrix[i][j] = math.inf
-            else:
-                p0 = nodes[i].get_coordinates()
-                p1 = nodes[i].get_coordinates()
-                cost_matrix[i][j] = math.dist(p0, p1)
+    # Initialize adjacency matrix
+    dist = [[float('inf') for j in range(num_nodes)] for i in range(num_nodes)] 
+    dist[0][0] = 0
+
+
+    for i in range(num_nodes):
+        dist[i][i] = 0.0
+
+    for node in nodes:
+        edges = node._edges
+        for edge in edges:
+            dist[edge._src._index][edge._dst._index] = edge._weight
+
+    for k in range(num_nodes):
+        for i in range(num_nodes):
+            for j in range(num_nodes):
+                dist[i][j] = min((dist[i][j], dist[i][k] + dist[k][j]))
+
+    return dist
+
     
     
