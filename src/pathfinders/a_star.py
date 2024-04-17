@@ -16,6 +16,7 @@ def a_star(graph: Graph, start: Node, end: Node):
     # Keep track of each node's previous node
     prev = [None] * graph.get_num_nodes()
     distances = [float('inf')] * graph.get_num_nodes()
+    f_score = [float('inf')] * graph.get_num_nodes()
     distances[start._index] = 0
 
     # Keep track of the order in which edges are added and considered
@@ -36,13 +37,11 @@ def a_star(graph: Graph, start: Node, end: Node):
             # New edge has been added
             added_edges.append(current_edge)
 
-            # Cannot set the start of the parent
+            # Set parent and distance
             if current is not start:
                 prev[current._index] = previous._index
+                distances[current._index] = distances[previous._index] + current_edge._weight
 
-            # Check if we have reached the end
-            if current is end:
-                return distances, prev, added_edges, considered_edges
 
             # Get all of the adjacent edges
             adjacent_edges = current.get_edges()
@@ -60,10 +59,10 @@ def a_star(graph: Graph, start: Node, end: Node):
                 f = calculate_f(current_distance, adjacent_edge)
 
                 # If the distance is less than the current distance for that node, keep track of it
-                if distances[prospect._index] > f:
+                if f_score[prospect._index] > f:
                     considered.append(adjacent_edge)
-                    distances[prospect._index] = f
-                    heapq.heappush(pq, (distances[prospect._index], adjacent_edge))
+                    f_score[prospect._index] = f
+                    heapq.heappush(pq, (f_score[prospect._index], adjacent_edge))
 
             considered_edges.append(considered)
 
