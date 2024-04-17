@@ -1,2 +1,3 @@
-from src.res.gvis import start
-start()
+from src.res.gvis import start, animate
+#start()
+animate()
