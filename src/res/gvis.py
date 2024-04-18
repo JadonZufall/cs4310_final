@@ -9,7 +9,7 @@ from IPython import display
 from src.tests.graph_generator import generate_random_graph
 
 
-def generate_gif(fr, graph, red_edges):
+def generate_gif(fr, graph, red_edges, start_node, end_node):
     g = nx.DiGraph()
     nodes = graph.get_nodes()
     fedges = []
@@ -23,7 +23,15 @@ def generate_gif(fr, graph, red_edges):
     black_edges = [i for i in fedges]
     g.add_edges_from(fedges)
     pos = nx.spring_layout(g)
-    nx.draw_networkx_nodes(g, pos, cmap=plt.get_cmap("jet"))
+    g.add_node(nodes.index(start_node), node_color="green")
+    g.add_node(nodes.index(end_node), node_color="red")
+    
+    nlist = list(map(lambda y: str(nodes.index(y)), list(filter(lambda x: x != start_node and x != end_node, nodes))))
+    nx.draw_networkx_edge_labels(g, pos)
+    nx.draw_networkx_nodes(g, pos, node_color="blue", nodelist=nlist)
+    nx.draw_networkx_nodes(g, pos, node_color="green", nodelist=[str(nodes.index(start_node))], label="START")
+    nx.draw_networkx_nodes(g, pos, node_color="red", nodelist=[str(nodes.index(end_node))], label="END")
+    
     nx.draw_networkx_edges(g, pos, edgelist=black_edges, edge_color="black", arrows=False)
     nx.draw_networkx_edges(g, pos, edgelist=red_edges, edge_color="red", arrows=False)
     return g
@@ -50,12 +58,10 @@ class PFunc:
     def __call__(self, fr) -> None:
         return self.f(fr, *self.args, **self.kwargs)
 
-def animate():
-    graph = generate_random_graph(num_nodes=10)
-    fdat = [(str(random.randint(0, 10-1)), str(random.randint(0, 10-1))) for i in range(0, 100)]
+def animate(graph, fdat, out_path, start_node, end_node):
     funcs = []
     for i, f in enumerate(fdat):
-        funcs.append(PFunc(generate_gif, graph, red_edges=fdat[0:i]))
+        funcs.append(PFunc(generate_gif, graph, red_edges=fdat[0:i], start_node=start_node, end_node=end_node))
     
     g = nx.DiGraph()
     nodes = graph.get_nodes()
@@ -78,7 +84,7 @@ def animate():
         print(frame)
     
     video = FuncAnimation(fig=plt.figure(), func=frame_animate, frames=30, interval=25)
-    video.save("out.mp4", fps=1)
+    video.save(out_path, fps=1)
     plt.close()
     
 
