@@ -4,6 +4,7 @@ from src.obj.node import Node
 from src.tests.graph_generator import generate_complete_graph, generate_random_graph, generate_tree_graph
 from src.pathfinders.dijkstra import dijkstra
 from src.pathfinders.a_star import a_star
+from src.pathfinders.yen import yen
 
 def floyd_warshall(graph: Graph):
     nodes = graph._nodes
@@ -58,6 +59,16 @@ class TestPathfinding(unittest.TestCase):
                 dist, prev, edges, considered = a_star(graph, node1, node2, weighted)
                 self.assertAlmostEqual(all_pairs_shortest[node1._index][node2._index], dist[node2._index], places=4, msg="A* Failure")
 
+    def check_yens(self, graph: Graph):
+        # Get the nodes from the graph
+        lengths, paths = yen(graph, start=graph._nodes[0], end = graph._nodes[-1], K=20)
+
+        # Check all returned paths are different
+        self.assertEqual(len(set(tuple(i) for i in paths)), len(paths), "Found Duplicated Paths")
+
+        for i in range(len(lengths) - 1):
+            self.assertLessEqual(lengths[i], lengths[i+1])
+
     def all_pathfinders(self, graph: Graph, weighted):
         # Get all Pairs Shortest Path for the Graph
         all_pairs_shortest = floyd_warshall(graph)
@@ -65,6 +76,7 @@ class TestPathfinding(unittest.TestCase):
         # Test each pathfindeer
         self.check_dijkstra(graph, all_pairs_shortest)
         self.check_a_star(graph, all_pairs_shortest, weighted)
+        self.check_yens(graph)
 
     def testSmallTree(self):
         graph1 = generate_tree_graph(num_nodes=5, weighted=False, directed=False)
