@@ -7,7 +7,6 @@ def bellman_ford(graph: Graph, start: Node, end: Node):
     for n in nodes:
         for e in n.get_edges():
             edges.append(e)
-    edges = list(set(edges))
     
     distances = []
     predecessor = []
@@ -15,17 +14,17 @@ def bellman_ford(graph: Graph, start: Node, end: Node):
         distances.append(-1)
         predecessor.append(None)
 
-    distances[nodes.index(start)] = 0
+    distances[start._index] = 0
     
     # Relax edges
-    for i in range(len(edges) - 1):
+    for i in range(len(nodes)):
         for e in edges:
             w = e._weight
             src = e._src
             dst = e._dst
-            if distances[nodes.index(src)] + w < distances[nodes.index(dst)]:
-                distances[nodes.index(src)] = distances[nodes.index(dst)] + w
-                predecessor[nodes.index(src)] = dst
+            if distances[src._index] + w < distances[dst._index]:
+                distances[src._index] = distances[dst._index] + w
+                predecessor[src._index] = dst
     
     
 
@@ -34,16 +33,16 @@ def bellman_ford(graph: Graph, start: Node, end: Node):
         w = e._weight
         src = e._src
         dst = e._dst
-        if distances[nodes.index(dst)] + w < distances[nodes.index(src)]:
-            predecessor[nodes.index(src)] = src
-            visted = [False for i in range(len(nodes))]
-            visited[nodes.index(dst)] = True
-            while not visted[nodes.index(dst)]:
-                visted[nodes.index(dst)] = True
-                dst = predecessor[nodes.index(dst)]
+        if distances[dst._index] + w < distances[src._index]:
+            predecessor[src._index] = src
+            visited = [False for i in range(len(nodes))]
+            visited[dst._index] = True
+            while not visited[dst._index]:
+                visited[dst._index] = True
+                dst = predecessor[dst._index]
             ncycle = [dst]
             while src != dst:
                 ncycle = ncycle + [src]
-                src = predecessor[nodes.index(src)]
+                src = predecessor[src._index]
     return distances, predecessor
     
