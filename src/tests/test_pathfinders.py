@@ -1,7 +1,7 @@
 import unittest
-from src.obj.graph import Graph
+from src.obj.graph import Graph, get_paths
 from src.obj.node import Node
-from src.tests.graph_generator import generate_complete_graph, generate_random_graph, generate_tree_graph
+from src.tests.graph_generator import generate_complete_graph, generate_random_graph, generate_tree_graph, generateGridGraph
 from src.pathfinders.dijkstra import dijkstra
 from src.pathfinders.a_star import a_star
 from src.pathfinders.yen import yen
@@ -40,6 +40,8 @@ class TestPathfinding(unittest.TestCase):
                 dist, prev, edges, considered = dijkstra(graph, node1, node2)
                 self.assertAlmostEqual(all_pairs_shortest[node1._index][node2._index], dist[node2._index], places=4, msg="A* Failure")
 
+
+
     def check_dijkstra(self, graph: Graph, all_pairs_shortest):
         # Get the nodes from the graph
         nodes = graph.get_nodes()
@@ -77,6 +79,10 @@ class TestPathfinding(unittest.TestCase):
         self.check_dijkstra(graph, all_pairs_shortest)
         self.check_a_star(graph, all_pairs_shortest, weighted)
         self.check_yens(graph)
+
+    def testSmallGrid(self):
+        graph = generateGridGraph(num_nodes=10)
+        self.all_pathfinders(graph, True)
 
     def testSmallTree(self):
         graph1 = generate_tree_graph(num_nodes=5, weighted=False, directed=False)

@@ -1,19 +1,27 @@
 from src.obj.graph import Graph
 from src.obj.node import Node, Edge
+from src.tests.graph_generator import generateGridGraph
 from fibheap import Fheap
+import math
 import heapq
 
-def calculate_f(current_distance, edge: Edge, weighted: bool):
+def calculate_f(current_distance, edge: Edge, weighted: bool, end):
     g = current_distance + edge._weight
     if weighted:
-        return g + edge._src.calculate_distance(edge._dst)
+        h = edge._dst.calculate_distance(end)
+        
+        # Uncomment the following line if using grid world
+        # h = abs(end._x - edge._dst._x) + abs(end._y - edge._dst._y)
+        
+        return g + h, h
     else:
-        return g
+        return g, 1
 
 def a_star(graph: Graph, start: Node, end: Node, weighted: bool = True):
+    i = 0
     # Create a priority queue of edges to consider
     pq = []
-    heapq.heappush(pq, (0,Edge(src=None, dst=start, weighted=False)))
+    heapq.heappush(pq, (0, 0, Edge(src=None, dst=start, weighted=False)))
 
     # Keep track of each node's previous node
     prev = [None] * graph.get_num_nodes()
@@ -28,7 +36,7 @@ def a_star(graph: Graph, start: Node, end: Node, weighted: bool = True):
     # Repeatedly pop from priority queue
     while pq:
         # Get the next edge in the pqueue
-        current_distance, current_edge = heapq.heappop(pq)
+        f, h, current_edge = heapq.heappop(pq)
 
         # Get the 2 nodes of the edge
         previous = current_edge._src
@@ -59,14 +67,15 @@ def a_star(graph: Graph, start: Node, end: Node, weighted: bool = True):
                 weight = adjacent_edge._weight
                 prospect = adjacent_edge._dst
 
-
-                f = calculate_f(current_distance, adjacent_edge, weighted)
+                
+                f, h = calculate_f(distances[current._index], adjacent_edge, weighted, end)
 
                 # If the distance is less than the current distance for that node, keep track of it
                 if f_score[prospect._index] > f:
                     considered.append(adjacent_edge)
                     f_score[prospect._index] = f
-                    heapq.heappush(pq, (f_score[prospect._index], adjacent_edge))
+
+                    heapq.heappush(pq, (f_score[prospect._index], h, adjacent_edge))
 
             considered_edges.append(considered)
 

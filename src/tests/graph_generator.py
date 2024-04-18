@@ -64,3 +64,27 @@ def generate_random_graph(num_nodes: int = random.randrange(0, MAX_NODES), weigh
         
     graphs[0].reorder_nodes()
     return graphs[0]
+
+def generate_grid_graph(num_nodes: int):
+    nodes = []
+    for y in range(num_nodes):
+        for x in range(num_nodes):
+            nodes.append(Node(str(y*num_nodes + x), x=x, y=y, index=y*num_nodes + x))
+            
+    graph = Graph(nodes)
+    for y in range(num_nodes):
+        for x in range(num_nodes):
+            node = graph._nodes[y*num_nodes + x]
+            if x != 0:
+                left = graph._nodes[y*num_nodes + x - 1]
+                graph.add_edge(node, left, True, True)
+            if x != num_nodes - 1:
+                right = graph._nodes[y*num_nodes + x + 1]
+                graph.add_edge(node, right, True, True)
+            if y != 0:
+                above = graph._nodes[(y-1)*num_nodes + x]
+                graph.add_edge(node, above, True, True)
+            if y != num_nodes - 1:
+                below = graph._nodes[(y+1)*num_nodes + x]
+                graph.add_edge(node, below, True, True)
+    return graph
