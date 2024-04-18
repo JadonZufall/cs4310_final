@@ -35,7 +35,7 @@ def yen(graph: Graph, start: Node, end: Node, K: int):
                     edge2 = graph.disable_edge(path[j+1], path[j])
                     if edge1 is not None:
                         edges_removed.append(edge1)
-                    if edge1 is not None:
+                    if edge2 is not None:
                         edges_removed.append(edge2)
 
 
@@ -53,7 +53,8 @@ def yen(graph: Graph, start: Node, end: Node, K: int):
             if distance[end._index] != float('inf'):
                 target_path = root_path[:-1] + get_paths(previous)[end._index]
                 target_length = get_path_length(graph, target_path)
-                heapq.heappush(B, (target_length, next(c), target_path))
+                if (target_length, target_path) not in B:
+                    heapq.heappush(B, (target_length, target_path))
             
             for edge in edges_removed:
                 edge.enable = True
@@ -63,7 +64,7 @@ def yen(graph: Graph, start: Node, end: Node, K: int):
         if len(B) != 0:
             stuff = heapq.heappop(B)
             lengths.append(stuff[0])
-            paths.append(stuff[2])
+            paths.append(stuff[1])
         else:
             break
     return lengths, paths
