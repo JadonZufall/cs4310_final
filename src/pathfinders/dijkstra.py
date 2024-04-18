@@ -1,9 +1,8 @@
 from src.obj.graph import Graph
 from src.obj.node import Node, Edge
-from fibheap import Fheap
 import heapq
 
-def dijkstra(graph: Graph, start: Node):
+def dijkstra(graph: Graph, start: Node, end: Node = None):
     # Create a priority queue of edges to consider
     pq = []
     heapq.heappush(pq, (0,Edge(src=None, dst=start, weighted=False)))
@@ -35,6 +34,9 @@ def dijkstra(graph: Graph, start: Node):
             if current is not start:
                 prev[current._index] = previous._index
 
+            if current is end:
+                return distances, prev, added_edges, considered_edges
+
             # Get all of the adjacent edges
             adjacent_edges = current.get_edges()
 
@@ -48,7 +50,7 @@ def dijkstra(graph: Graph, start: Node):
                 prospect = adjacent_edge._dst
 
                 # If the distance is less than the current distance for that node, keep track of it
-                if distances[prospect._index] > current_distance + weight:
+                if adjacent_edge.enabled and prospect.enabled and distances[prospect._index] > current_distance + weight:
                     considered.append(adjacent_edge)
                     distances[prospect._index] = current_distance + weight
                     heapq.heappush(pq, (distances[prospect._index], adjacent_edge))

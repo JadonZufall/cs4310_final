@@ -3,7 +3,6 @@ import src.obj.graph as graph
 from src.obj.node import Node
 import random
 import copy
-from fibheap import Fheap
 
 MAX_NODES = 31
 
@@ -34,7 +33,7 @@ def generate_complete_graph(num_nodes: int = random.randrange(0, MAX_NODES), wei
     for node1 in nodes:
         for node2 in nodes:
             if node1 is not node2:
-                g.add_edge(node1, node2, weighted, directed)
+                g.add_edge(node1, node2, weighted, True)
     g.reorder_nodes()
     return g
 

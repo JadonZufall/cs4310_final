@@ -29,6 +29,22 @@ class Graph:
             if not directed:
                 node2.add_edge(node1, weighted)
     
+    def disable_edge(self, node1_index, node2_index):
+        edge = self._nodes[node1_index].get_edge_by_index(node2_index)
+        if edge is not None and edge.enabled:
+            edge.enabled = False
+            return edge
+        return None
+
+    def disable_node(self, node_index):
+        if self._nodes[node_index].enabled:
+            self._nodes[node_index].enabled = False
+            return self._nodes[node_index]
+        return None
+
+    def restore_edge(self, original_weight, edge):
+        edge._weight = original_weight
+
     def get_num_nodes(self) -> int:
         return len(self._nodes)
 
@@ -57,6 +73,9 @@ class Graph:
         for i in range(len(self._nodes)):
             self._nodes[i].reorder_adjacents()
             self._nodes[i]._index = i
+            
+        for i in range(len(self._nodes)):
+            self._nodes[i].refresh_dict()
 
 def get_paths(previous_list):
     all_paths = []
@@ -70,3 +89,10 @@ def get_paths(previous_list):
         current_path.reverse()
         all_paths.append(current_path)
     return all_paths
+
+def get_path_length(graph: Graph, path):
+    length = 0
+
+    for i in range(len(path) - 1):
+        length += graph._nodes[path[i]].get_edge_by_index(path[i+1])._weight
+    return length

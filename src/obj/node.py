@@ -9,6 +9,7 @@ class Edge:
         self._src: Node = src
         self._dst: Node = dst
 
+        self.enabled = True
 
         if not weighted:
             self._weight: float = 1.0
@@ -44,6 +45,8 @@ class Node:
         self._x: int = x
         self._y: int = y
         self._index = index
+        self._edges_by_destination_ind = dict()
+        self.enabled = True
 
     def __repr__(self):
         return repr((self._value, self._x, self._y))
@@ -55,8 +58,19 @@ class Node:
         return self._value
 
     def add_edge(self, dst: 'Node', weighted: bool) -> None:
-        self._edges.append(Edge(self, dst, weighted))
+        new_edge = Edge(self, dst, weighted)
+        self._edges.append(new_edge)
+        self._edges_by_destination_ind[dst._index] = new_edge
 
+    def refresh_dict(self):
+        self._edges_by_destination_ind = dict()
+        for edge in self._edges:
+            self._edges_by_destination_ind[edge._dst._index] = edge 
+
+    def get_edge_by_index(self, destination_index):
+        if destination_index in self._edges_by_destination_ind:
+            return self._edges_by_destination_ind[destination_index]
+        return None
     
     def get_edges(self) -> list[Edge]:
         return self._edges

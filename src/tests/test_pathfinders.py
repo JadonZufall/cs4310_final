@@ -30,6 +30,15 @@ def floyd_warshall(graph: Graph):
     return dist
 
 class TestPathfinding(unittest.TestCase):
+    def check_dijkstra_end(self, graph: Graph, all_pairs_shortest):
+        # Get the nodes from the graph
+        nodes = graph.get_nodes()
+
+        for node1 in nodes:
+            for node2 in nodes:
+                dist, prev, edges, considered = dijkstra(graph, node1, node2)
+                self.assertAlmostEqual(all_pairs_shortest[node1._index][node2._index], dist[node2._index], places=4, msg="A* Failure")
+
     def check_dijkstra(self, graph: Graph, all_pairs_shortest):
         # Get the nodes from the graph
         nodes = graph.get_nodes()
