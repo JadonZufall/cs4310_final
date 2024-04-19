@@ -5,3 +5,4 @@ pip-delete-this-directory.txt
 venv
 *.dat
 *.mp4
+.DS_Store
